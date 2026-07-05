@@ -125,12 +125,18 @@ function createSetupWindow() {
   
   setupWin.loadFile('setup.html')
   setupWin.setMenuBarVisibility(false)
+
+  // If the user closes setup without completing, and Buddy isn't running, quit.
+  setupWin.on('closed', () => {
+    setupWin = null
+    if (!buddyWin) app.quit()
+  })
 }
 
 function createTray() {
   const iconPath = ensureIcon()
   const img = nativeImage.createFromPath(iconPath)
-  tray = new Tray(img)
+  tray = new Tray(path.join(__dirname, 'icon.png'))
   rebuildTrayMenu()
   tray.setToolTip('Buddy')
 }
@@ -141,6 +147,12 @@ function rebuildTrayMenu() {
     { type: 'separator' },
     { label: 'Show',  click: () => buddyWin && buddyWin.show() },
     { label: 'Hide',  click: () => buddyWin && buddyWin.hide() },
+    { type: 'separator' },
+    { label: 'Settings / Setup', click: () => {
+        if (!setupWin) createSetupWindow()
+        else setupWin.focus()
+      } 
+    },
     { type: 'separator' },
     {
       label: 'Size', submenu: [
@@ -289,9 +301,19 @@ ipcMain.on('setup-complete', (e, data) => {
     }
   } catch(e) {}
 
-  if (setupWin) { setupWin.close(); setupWin = null }
-  loadUserEnv()
-  launchBuddy()
+  // 1. Close the setup window
+  if (setupWin) {
+    setupWin.close()
+  }
+
+  // 2. The Clone Check
+  if (buddyWin) {
+    // If Buddy is already alive, just reload his brain so he reads the new keys
+    buddyWin.reload() 
+  } else {
+    // If this is the first time, spawn him normally
+    createBuddyWindow()
+  }
 })
 
 function showBubbleFromMain(message, mood, duration) {

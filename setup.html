@@ -128,25 +128,54 @@
   </p>
 </div>
 <script>
-  const { ipcRenderer } = require('electron')
-  function open(url) { ipcRenderer.send('open-link', url) }
-  function save() {
-    const key = document.getElementById('apiKey').value.trim()
-    if (!key.startsWith('AIzaSy')) {
-      document.getElementById('err').style.display = 'block'; return
+  // This defines the save() function your button is trying to call
+  window.save = function() {
+    
+    // Safely update the button state
+    const btn = document.querySelector('button') || document.getElementById('launch-btn');
+    if (btn) {
+      btn.textContent = 'Launching...';
+      btn.disabled = true;
     }
-    document.getElementById('err').style.display = 'none'
-    document.getElementById('btn').disabled = true
-    document.getElementById('btn').textContent = 'Launching…'
-    ipcRenderer.send('setup-complete', {
-      apiKey:       key,
-      userName:     document.getElementById('userName').value.trim(),
-      userRole:     document.getElementById('userRole').value.trim(),
-      clientId:     document.getElementById('clientId').value.trim(),
-      tenantId:     document.getElementById('tenantId').value.trim(),
-      clientSecret: document.getElementById('clientSecret').value.trim()
-    })
-  }
+
+    // Helper to extract values safely, regardless of exact ID
+    function getSafeValue(id) {
+      const el = document.getElementById(id) || document.querySelector(`[name="${id}"]`);
+      return el ? el.value.trim() : '';
+    }
+
+    // Gather the data
+    const data = {
+      userName: getSafeValue('userName') || getSafeValue('name') || 'Friend',
+      userRole: getSafeValue('userRole') || getSafeValue('role') || 'Professional',
+      apiKey: getSafeValue('apiKey') || getSafeValue('geminiKey'),
+      clientId: getSafeValue('clientId'),
+      tenantId: getSafeValue('tenantId'),
+      clientSecret: getSafeValue('clientSecret')
+    };
+
+    // Require the API key
+    if (!data.apiKey) {
+      alert("A Gemini API Key is required to wake Buddy up.");
+      if (btn) {
+        btn.textContent = 'Launch Buddy';
+        btn.disabled = false;
+      }
+      return;
+    }
+
+    // Send data to the main process
+    try {
+      window.api.send('setup-complete', data);
+    } catch (err) {
+      console.error("Failed to send setup data:", err);
+      alert("System error: Preload script bridge not found.");
+      if (btn) {
+        btn.textContent = 'Launch Buddy';
+        btn.disabled = false;
+      }
+    }
+  };
 </script>
 </body>
 </html>
