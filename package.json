@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@azure/msal-node": "^2.6.0",
-    "@google/generative-ai": "^0.2.1",
+    "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.4.0",
     "node-fetch": "^2.7.0"
   },
@@ -30,7 +30,14 @@
       }
     ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "assets/icon.png"
     },
     "nsis": {
@@ -48,7 +55,10 @@
       "!node_modules/.cache"
     ],
     "extraResources": [
-      { "from": "config.json", "to": "config.json" }
+      {
+        "from": "config.json",
+        "to": "config.json"
+      }
     ]
   }
 }

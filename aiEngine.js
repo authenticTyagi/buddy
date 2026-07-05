@@ -1,5 +1,5 @@
 require('dotenv').config()
-const Anthropic = require('@anthropic-ai/sdk')
+const { GoogleGenerativeAI } = require('@google/generative-ai')
 const fs   = require('fs')
 const path = require('path')
 const os   = require('os')
@@ -50,7 +50,7 @@ function getPersonality() {
 }
 
 // ── client ─────────────────────────────────────────────────────────────────
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 // ── logging ────────────────────────────────────────────────────────────────
 function getLogPath() {
@@ -97,16 +97,21 @@ async function generateMessage(eventType, context) {
   log(`PROMPT  : ${prompt}`)
 
   try {
-    const res = await client.messages.create({
-      model:    'claude-haiku-4-5-20251001',
-      max_tokens: 150,
-      system:   buildSystemPrompt(),
-      messages: [{ role: 'user', content: prompt }]
+    // Initializing the model per call ensures the time-based personality updates properly
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-2.5-flash',
+      systemInstruction: buildSystemPrompt(),
+      generationConfig: { maxOutputTokens: 150 }
     })
+
+    const res = await model.generateContent(prompt)
+    
     const latency = Date.now() - t0
-    const msg     = res.content[0].text.trim()
-    const { input_tokens: it, output_tokens: ot } = res.usage
-    log(`SOURCE  : CLAUDE API`)
+    const msg     = res.response.text().trim()
+    const it      = res.response.usageMetadata?.promptTokenCount || 0
+    const ot      = res.response.usageMetadata?.candidatesTokenCount || 0
+    
+    log(`SOURCE  : GEMINI API`)
     log(`REPLY   : ${msg}`)
     log(`TOKENS  : in=${it} out=${ot} total=${it+ot}`)
     log(`LATENCY : ${latency}ms`)

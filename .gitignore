@@ -1,6 +1,15 @@
+# Dependency directories
 node_modules/
 dist/
+
+# Environment variables (CRITICAL FOR SECURITY)
 .env
+
+# Logs and user-specific configs
 buddy.log
-assets/icon.png
-assets/tray.png
+config.json
+
+# Build outputs
+dist/
+build/
+*.exe

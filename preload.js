@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('api', {
   on: (channel, func) => {
     const validChannels = [
       'set-mood', 'force-bubble', 'set-size', 'drag-position-update', 
-      'screen-info', 'update-display-bounds'
+      'screen-info', 'update-display-bounds', 'set-text', 'set-buddy', 'set-buddy-position'
     ]
     if (validChannels.includes(channel)) ipcRenderer.on(channel, (event, ...args) => func(event, ...args))
   }

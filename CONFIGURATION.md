@@ -8,7 +8,7 @@ Edit it in any text editor and restart Buddy.
 | Key | Type | Default | Description |
 |---|---|---|---|
 | `userName` | string | `"Friend"` | Your name — used in AI messages |
-| `userRole` | string | `"Professional"` | Your role — gives Claude context |
+| `userRole` | string | `"Professional"` | Your role — Gemini context |
 | `size` | string | `"medium"` | `small` / `medium` / `large` |
 | `speed` | number | `1.5` | Walk speed (1=slow, 2=fast) |
 | `language` | string | `"auto"` | Override language e.g. `"French"`. `"auto"` = detect from system |
@@ -79,4 +79,4 @@ Add your own timed messages:
 ]
 ```
 
-Claude will rewrite it in Buddy's voice automatically.
+Gemini will rewrite it in Buddy's voice automatically.

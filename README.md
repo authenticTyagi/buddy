@@ -1,12 +1,12 @@
 # 🧑‍🚀 Buddy — AI Desktop Companion
 
-A tiny astronaut who lives on your taskbar, powered by Claude AI.
+A tiny astronaut who lives on your taskbar, powered by Gemini AI.
 Buddy walks, stumbles, slides, dances, and delivers smart context-aware
 notifications from your calendar, emails, Teams, system, and more.
 
 ## Features
 
-- AI-powered messages — every notification generated live by Claude
+- AI-powered messages — every notification generated live by Gemini
 - Microsoft 365 — Outlook emails, calendar, Teams messages
 - System awareness — CPU spikes, RAM, accurate real-time stats
 - App context — detects VS Code, Excel, Teams and gives relevant tips
@@ -30,7 +30,7 @@ and run it.
 
 The setup screen appears on first launch. Enter:
 1. Your name and role (personalises Buddy's messages)
-2. Your Anthropic API key — free at https://console.anthropic.com
+2. Your Gemini API key — free at https://aistudio.google.com/
 3. Azure credentials — optional, unlocks Outlook + Teams
 
 ## Development

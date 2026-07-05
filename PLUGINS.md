@@ -7,7 +7,7 @@ Buddy uses an event-driven plugin architecture. Each plugin is an independent No
 ## How Plugins Work
 
 ```
-Plugin → emits event → PluginManager → TriggerEngine → Claude AI → Buddy bubble
+Plugin → emits event → PluginManager → TriggerEngine → Gemini AI → Buddy bubble
 ```
 
 Every plugin:

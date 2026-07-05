@@ -43,12 +43,13 @@
 <body>
   <div id="box"></div>
   <script>
-    const { ipcRenderer } = require('electron')
     const box = document.getElementById('box')
-    ipcRenderer.on('set-text', (e, txt) => {
+    
+    // Listen through the secure preload bridge instead of ipcRenderer
+    window.api.on('set-text', (e, txt) => {
       box.textContent = txt
       box.style.display = 'block'
     })
-  </script>
+</script>
 </body>
 </html>

@@ -45,7 +45,7 @@ function isFirstRun() {
   if (!fs.existsSync(p)) return true
   try {
     const c = fs.readFileSync(p, 'utf8')
-    return !c.includes('ANTHROPIC_API_KEY=sk-ant-') && !c.includes('GEMINI_API_KEY=')
+    return !c.includes('GEMINI_API_KEY=')
   } catch (e) {
     return true
   }
