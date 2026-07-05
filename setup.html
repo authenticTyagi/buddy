@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Buddy — Setup</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #12121e;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px;
+      padding: 36px 32px 28px;
+      width: 100%; max-width: 490px;
+    }
+    .hero { display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+    .helmet {
+      width: 48px; height: 48px;
+      background: #e8e8e8;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    h1 { font-size:22px; font-weight:600; }
+    .sub { font-size:13px; color:rgba(255,255,255,0.45); margin-bottom:28px; margin-top:4px; }
+    .section {
+      font-size:11px; font-weight:500;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding-bottom:8px; margin-top:24px; margin-bottom:4px;
+    }
+    .optional { color:rgba(255,255,255,0.2); font-size:11px; margin-left:6px; text-transform:none; letter-spacing:0; }
+    label { display:block; font-size:12px; color:rgba(255,255,255,0.55); margin-top:14px; margin-bottom:5px; }
+    label a { color:rgba(255,255,255,0.4); font-size:11px; float:right; text-decoration:none; }
+    label a:hover { color:rgba(255,255,255,0.7); }
+    input {
+      width:100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 9px;
+      padding: 10px 14px;
+      color: #f0f0f0;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .18s;
+    }
+    input:focus { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.09); }
+    input::placeholder { color:rgba(255,255,255,0.18); }
+    input.mono { font-family: 'Cascadia Code', 'Consolas', monospace; font-size:12px; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .err { color:#ff6b6b; font-size:12px; margin-top:10px; display:none; }
+    button {
+      width:100%; margin-top:26px;
+      padding: 13px;
+      background: #ffffff;
+      color: #12121e;
+      border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover  { opacity: 0.92; }
+    button:active { transform: scale(0.99); }
+    button:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+    .footer {
+      text-align:center; margin-top:16px;
+      font-size:11.5px; color:rgba(255,255,255,0.25);
+    }
+    .footer a { color:rgba(255,255,255,0.4); text-decoration:none; }
+    .footer a:hover { color:rgba(255,255,255,0.65); }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="hero">
+    <div class="helmet">🧑‍🚀</div>
+    <div>
+      <h1>Welcome to Buddy</h1>
+      <p class="sub">Your AI desktop companion. Ready in 60 seconds.</p>
+    </div>
+  </div>
+
+  <div class="section">Your details</div>
+  <div class="row2">
+    <div>
+      <label>Your name</label>
+      <input id="userName" placeholder="Alex" />
+    </div>
+    <div>
+      <label>Your role</label>
+      <input id="userRole" placeholder="Software Engineer" />
+    </div>
+  </div>
+
+  <div class="section">Anthropic API key — required</div>
+  <label>
+    API key
+    <a href="#" onclick="open('https://console.anthropic.com')">Get one free →</a>
+  </label>
+  <input id="apiKey" type="password" class="mono" placeholder="sk-ant-api03-..." />
+
+  <div class="section">Microsoft 365<span class="optional">— optional, for Outlook + Teams</span></div>
+  <label>Azure Client ID</label>
+  <input id="clientId" class="mono" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+  <label>Azure Tenant ID</label>
+  <input id="tenantId" class="mono" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+  <label>Azure Client Secret</label>
+  <input id="clientSecret" type="password" class="mono" placeholder="your-secret-value" />
+
+  <p class="err" id="err">Please enter a valid Anthropic API key (starts with sk-ant-).</p>
+  <button id="btn" onclick="save()">Launch Buddy 🚀</button>
+  <p class="footer">
+    Keys are stored locally on your machine only. &nbsp;·&nbsp;
+    <a href="#" onclick="open('https://github.com/YOUR_GITHUB_USERNAME/buddy')">View source on GitHub</a>
+  </p>
+</div>
+<script>
+  const { ipcRenderer } = require('electron')
+  function open(url) { ipcRenderer.send('open-link', url) }
+  function save() {
+    const key = document.getElementById('apiKey').value.trim()
+    if (!key.startsWith('sk-ant-')) {
+      document.getElementById('err').style.display = 'block'; return
+    }
+    document.getElementById('err').style.display = 'none'
+    document.getElementById('btn').disabled = true
+    document.getElementById('btn').textContent = 'Launching…'
+    ipcRenderer.send('setup-complete', {
+      apiKey:       key,
+      userName:     document.getElementById('userName').value.trim(),
+      userRole:     document.getElementById('userRole').value.trim(),
+      clientId:     document.getElementById('clientId').value.trim(),
+      tenantId:     document.getElementById('tenantId').value.trim(),
+      clientSecret: document.getElementById('clientSecret').value.trim()
+    })
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+buddy.log
+assets/icon.png
+assets/tray.png

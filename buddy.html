@@ -1,0 +1,27 @@
+<!-- buddy.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <style>
+    * { margin:0; padding:0; }
+    html, body {
+      background: transparent !important;
+      overflow: hidden;
+      width: 100vw; height: 100vh;
+    }
+    #bc {
+      display: block;
+      position: absolute;
+      bottom: 0; left: 0;
+      cursor: grab;
+    }
+    #bc:active { cursor: grabbing; }
+  </style>
+</head>
+<body>
+  <canvas id="bc"></canvas>
+  <script src="buddy.js"></script>
+</body>
+</html>
