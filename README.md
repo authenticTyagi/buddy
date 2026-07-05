@@ -23,7 +23,7 @@ notifications from your calendar, emails, Teams, system, and more.
 ## Install
 
 Download the latest `Buddy-Setup.exe` from
-[Releases](https://github.com/YOUR_GITHUB_USERNAME/buddy/releases/latest)
+[Releases](https://github.com/authenticTyagi/buddy/releases/latest)
 and run it.
 
 ## First-time setup
@@ -36,7 +36,7 @@ The setup screen appears on first launch. Enter:
 ## Development
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/buddy
+git clone https://github.com/authenticTyagi/buddy
 cd buddy
 npm install
 cp .env.example .env
